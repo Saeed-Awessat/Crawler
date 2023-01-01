@@ -4,25 +4,31 @@ import { Images } from "./Images";
 import { Links } from "./Links";
 import { Screenshots } from "./Screenshots";
 
-export const Results = () => {
+interface IResultsProps {
+  inputWebsite: string;
+}
+
+export const Results = ({ inputWebsite }: IResultsProps) => {
+  const links: any = [];
+  const images: any = [];
   return (
     <Tabs>
       <TabList>
         <Tab>Links</Tab>
         <Tab>Images</Tab>
-        <Tab>Screenshots</Tab>
+        {/* <Tab>Screenshots</Tab>*/}
       </TabList>
 
       <TabPanels>
         <TabPanel>
-          <Links />
+          <Links links={links} />
         </TabPanel>
         <TabPanel>
-          <Images />
+          <Images images={images} />
         </TabPanel>
-        <TabPanel>
-          <Screenshots />
-        </TabPanel>
+        {/*<TabPanel>
+          <Screenshots screenshots={screenshots} />
+        </TabPanel>*/}
       </TabPanels>
     </Tabs>
   );
