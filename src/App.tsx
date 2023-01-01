@@ -1,38 +1,33 @@
-import * as React from "react"
+import * as React from "react";
 import {
   ChakraProvider,
   Box,
-  Text,
-  Link,
+  //  Text,
+  //  Link,
   VStack,
-  Code,
-  Grid,
   theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+  Container,
+} from "@chakra-ui/react";
+import { Footer } from "./components/Footer";
+import { Header } from "./components/Header";
+import { SearchBar } from "./components/SearchBar";
+import { Results } from "./components/Results";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
+    <Box>
+      <Header />
+
+      <Container width="1200px" margin="90px auto 20px auto">
+        <Box>
+          <SearchBar onSearch={() => {}} />
+        </Box>
+      </Container>
+
+      <Container width="100%">
+        <Results />
+      </Container>
+      <Footer />
     </Box>
   </ChakraProvider>
-)
+);
