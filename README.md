@@ -1,10 +1,10 @@
 # Crawler
 
-####Install
+# Install packages
 
 `$ yarn install`
 
-####Run
+# Run App
 
 `$ yarn run`
 
