@@ -12,7 +12,7 @@ interface ICrawl {
 const seenUrls = {} as any;
 const links: any[] = [];
 const images: any[] = [];
-const creenshot: any[] = [];
+const screenshot: any[] = [];
 
 const getUrl = (link: string, host: string, protocol: string) => {
   if (link.includes("http")) {
