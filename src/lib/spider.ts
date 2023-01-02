@@ -2,7 +2,9 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import * as fs from "fs";
 import * as path from "path";
-import * as urlParser from "url";
+import { URL as urlParser } from "url";
+
+const baseUrl = "http://localhost:8080";
 
 interface ICrawl {
   url: string;
@@ -29,48 +31,52 @@ const getHtmlElement = (element: string): any[] => {
 };
 
 const crawl = async ({ url, ignore }: ICrawl) => {
-  if (seenUrls[url]) return;
+  if (!url || !window.URL || seenUrls[url]) return;
 
   seenUrls[url] = true;
-  const { host, protocol } = new urlParser.URL(url) as any;
-  const { data } = await axios.get(url);
-  const html = await data.text();
-  const $ = cheerio.load(html);
+  const { host, protocol } = new window.URL(url);
+  const { data } = await axios.get(`${baseUrl}/getCrawler?url=${url}`);
+  console.log({ data });
+  // const html = await data.text();
+  const $ = cheerio.load(data);
 
-  $("a").each((_, row) => {
-    links.push(row.attribs?.href as any);
-  });
-
-  const imageUrls = $("img")
-    .map((i, link) => link.attribs.src)
+  const links = $("a")
+    .map((i, link) => link.attribs.href)
     .get();
+  // const imageUrls = $("img")
+  //   .map((i, link) => link.attribs.src)
+  //   .get();
 
-  imageUrls.forEach((imageUrl: string) => {
-    axios({ url: getUrl(imageUrl, host, protocol) }).then((response: any) => {
-      const filename = path.basename(imageUrl);
-      const dest = fs.createWriteStream(`images/${filename}`);
-      response.body.pipe(dest);
-    });
-  });
+  console.log({ links });
+
+  // imageUrls?.forEach((imageUrl: string) => {
+  //   axios({ url: getUrl(imageUrl, host, protocol) }).then((response: any) => {
+  //     const filename = path.basename(imageUrl);
+  //     const dest = fs.createWriteStream(`images/${filename}`);
+  //     response.body.pipe(dest);
+  //   });
+  // });
 
   links
-    .filter((link) => link.includes(host) && !link.includes(ignore))
+    ?.filter((link) => link.includes(host) && !link.includes(ignore))
     .forEach((link) => {
       crawl({
         url: getUrl(link, host, protocol),
         ignore,
       });
     });
-  console.log({ links });
+  return {
+    links,
+    // images: imageUrls,
+  };
 };
 
-crawl({
-  url: "http://stevescooking.blogspot.com/",
-  ignore: "/search",
-});
-
-export const CrawlApi = {
-  links: getHtmlElement("a"),
-  images: getHtmlElement("img"),
+export const CrawlApi = (inputWebsite: string) => {
+  return crawl({
+    url: inputWebsite,
+    ignore: "/search",
+  });
+  // links: getHtmlElement("a"),
+  // images: getHtmlElement("img"),
   // screenshot: getHtmlElement('screenshot'),
 };

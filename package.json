@@ -34,6 +34,7 @@
     "cheerio": "^1.0.0-rc.12",
     "formik": "^2.2.9",
     "framer-motion": "^6.2.9",
+    "fs": "^0.0.1-security",
     "node-fetch": "^3.3.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -64,5 +65,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "browser": {
+    "fs": false,
+    "url": false,
+    "path": false
+  },
+  "proxy": "http://localhost:8080/",
+  "devDependencies": {
+    "http-proxy-middleware": "^2.0.6"
   }
 }

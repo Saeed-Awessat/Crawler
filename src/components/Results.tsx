@@ -3,14 +3,26 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import { Images } from "./Images";
 import { Links } from "./Links";
 import { Screenshots } from "./Screenshots";
+import { CrawlApi } from "../lib/spider";
 
 interface IResultsProps {
   inputWebsite: string;
 }
 
 export const Results = ({ inputWebsite }: IResultsProps) => {
-  const links: any = [];
-  const images: any = [];
+  let images: any = [];
+  const [links, setLinks] = React.useState<string[]>([]);
+
+  React.useEffect(() => {
+    CrawlApi(inputWebsite)
+      .then((result) => {
+        const linksFromRes = result ?? { links: [] };
+        setLinks(linksFromRes?.links);
+      })
+      .catch((err) => {});
+  }, [inputWebsite]);
+
+  console.log({ links, images });
   return (
     <Tabs>
       <TabList>
